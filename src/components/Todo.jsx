@@ -7,11 +7,14 @@ import {
   Text,
   Spacer,
   Tooltip,
+  FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 
 function Todo({ todo, onToggleTodo, onDeleteTodo, onEditTodo }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
+  const [editError, setEditError] = useState("");
 
   const inputRef = useRef(null);
 
@@ -24,14 +27,21 @@ function Todo({ todo, onToggleTodo, onDeleteTodo, onEditTodo }) {
 
   const handleSave = () => {
     const trimmed = editText.trim();
-    if (trimmed.length < 3) return; // mínimo simple (después lo hacemos con mensaje)
+
+    if (trimmed.length < 3) {
+      setEditError("La tarea debe tener al menos 3 caracteres");
+      return;
+    }
+
     onEditTodo(todo.id, trimmed);
     setIsEditing(false);
+    setEditError("");
   };
 
   const handleCancel = () => {
     setEditText(todo.text);
     setIsEditing(false);
+    setEditError("");
   };
 
   return (
@@ -45,7 +55,9 @@ function Todo({ todo, onToggleTodo, onDeleteTodo, onEditTodo }) {
       <HStack spacing={3} align="center">
         {/* ✅ COMPLETAR */}
         <Tooltip
-          label={todo.completed ? "Marcar como pendiente" : "Marcar como completada"}
+          label={
+            todo.completed ? "Marcar como pendiente" : "Marcar como completada"
+          }
           hasArrow
           placement="top"
         >
@@ -61,16 +73,22 @@ function Todo({ todo, onToggleTodo, onDeleteTodo, onEditTodo }) {
 
         {/* ✍️ TEXTO / INPUT */}
         {isEditing ? (
-          <Input
-            ref={inputRef}
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-            size="sm"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleSave();
-              if (e.key === "Escape") handleCancel();
-            }}
-          />
+          <FormControl isInvalid={!!editError}>
+            <Input
+              ref={inputRef}
+              value={editText}
+              onChange={(e) => {
+                setEditText(e.target.value);
+                if (editError) setEditError("");
+              }}
+              size="sm"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSave();
+                if (e.key === "Escape") handleCancel();
+              }}
+            />
+            <FormErrorMessage>{editError}</FormErrorMessage>
+          </FormControl>
         ) : (
           <Text
             flex="1"
@@ -118,8 +136,9 @@ function Todo({ todo, onToggleTodo, onDeleteTodo, onEditTodo }) {
                 size="sm"
                 variant="ghost"
                 onClick={() => {
-                  setEditText(todo.text); // por si cambió desde afuera
+                  setEditText(todo.text);
                   setIsEditing(true);
+                  setEditError("");
                 }}
                 icon={<span>✏️</span>}
               />
