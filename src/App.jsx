@@ -3,6 +3,9 @@ import Form from "./components/Form.jsx";
 import TodoList from "./components/TodoList.jsx";
 
 import {
+  Box,
+  Heading,
+  VStack,
   Button,
   Modal,
   ModalOverlay,
@@ -11,9 +14,10 @@ import {
   ModalBody,
   ModalFooter,
   ModalCloseButton,
-  useDisclosure,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
+
 
 function App() {
   const STORAGE_KEY = "todos";
@@ -70,8 +74,20 @@ function App() {
   });
 
   return (
-    <div className="app">
-      <h1>Todo List</h1>
+  <Box minH="100vh" bg="gray.100" py={10}>
+    <VStack
+      spacing={6}
+      maxW="600px"
+      mx="auto"
+      bg="white"
+      p={6}
+      borderRadius="md"
+      boxShadow="md"
+      align="stretch"
+    >
+      <Heading size="lg" textAlign="center">
+        Todo List
+      </Heading>
 
       <Form onAddTodo={handleAddTodo} />
 
@@ -90,42 +106,47 @@ function App() {
         onDeleteTodo={handleDeleteTodo}
         onEditTodo={handleEditTodo}
       />
+    </VStack>
 
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-  <ModalOverlay />
-  <ModalContent>
-    <ModalHeader>Eliminar tarea</ModalHeader>
-    <ModalCloseButton />
+    {/* 🔽 El modal SIEMPRE va fuera del VStack */}
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Eliminar tarea</ModalHeader>
+        <ModalCloseButton />
 
-    <ModalBody>
-      <Text>
-        ¿Seguro que querés eliminar{" "}
-        <strong>{todoToDelete?.text}</strong>?
-      </Text>
-    </ModalBody>
+        <ModalBody>
+          <Text>
+            ¿Seguro que querés eliminar{" "}
+            <strong>{todoToDelete?.text}</strong>?
+          </Text>
+        </ModalBody>
 
-    <ModalFooter>
-      <Button variant="ghost" mr={3} onClick={onClose}>
-        Cancelar
-      </Button>
-      <Button
-        colorScheme="red"
-        onClick={() => {
-          setTodos((prev) =>
-            prev.filter((t) => t.id !== todoToDelete.id)
-          );
-          setTodoToDelete(null);
-          onClose();
-        }}
-      >
-        Eliminar
-      </Button>
-    </ModalFooter>
-  </ModalContent>
-</Modal>
+        <ModalFooter>
+          <Button variant="ghost" mr={3} onClick={onClose}>
+            Cancelar
+          </Button>
+          <Button
+            colorScheme="red"
+            
+            onClick={() => {
+  if (!todoToDelete) return;
 
-    </div>
+  setTodos((prev) =>
+    prev.filter((t) => t.id !== todoToDelete.id)
   );
+  setTodoToDelete(null);
+  onClose();
+}}
+
+          >
+            Eliminar
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  </Box>
+);
 }
 
 export default App;
