@@ -1,121 +1,126 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  Box,
+  HStack,
+  IconButton,
+  Input,
+  Text,
+  Spacer,
+} from "@chakra-ui/react";
 
-export default function Todo({ todo, onToggleTodo, onDeleteTodo, onEditTodo }) {
+function Todo({ todo, onToggleTodo, onDeleteTodo, onEditTodo }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    setEditText(todo.text);
-  }, [todo.text]);
+  const inputRef = useRef(null);
 
-  const startEdit = () => {
-    setIsEditing(true);
-    setError("");
-    setEditText(todo.text);
-  };
+useEffect(() => {
+  if (isEditing) {
+    inputRef.current?.focus();
+    inputRef.current?.select();
+  }
+}, [isEditing]);
 
-  const cancelEdit = () => {
-    setIsEditing(false);
-    setError("");
-    setEditText(todo.text);
-  };
 
-  const saveEdit = () => {
+  const handleSave = () => {
     const trimmed = editText.trim();
-
-    if (trimmed.length === 0) {
-      setError("La tarea no puede estar vacía.");
-      return;
-    }
-    if (trimmed.length < 2) {
-      setError("Escribí al menos 2 caracteres.");
-      return;
-    }
-
+    if (trimmed.length < 3) return; // mínimo simple (después lo hacemos con mensaje si querés)
     onEditTodo(todo.id, trimmed);
     setIsEditing(false);
-    setError("");
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") saveEdit();
-    if (e.key === "Escape") cancelEdit();
-  };
+  const handleCancel = () => {
+  setEditText(todo.text);
+  setIsEditing(false);
+};
+
 
   return (
-    <li
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "12px",
-        marginBottom: "10px",
-      }}
+    <Box
+      p={3}
+      borderWidth="1px"
+      borderRadius="md"
+      boxShadow="sm"
+      _hover={{ boxShadow: "md" }}
     >
-      <div style={{ flex: 1 }}>
-        {!isEditing ? (
-          <span
-            style={{
-              display: "block",
-              textDecoration: todo.completed ? "line-through" : "none",
-              opacity: todo.completed ? 0.7 : 1,
-            }}
+      <HStack spacing={3} align="center">
+        <IconButton
+          aria-label="Completar"
+          onClick={() => onToggleTodo(todo.id)}
+          size="sm"
+          variant={todo.completed ? "solid" : "outline"}
+          colorScheme={todo.completed ? "green" : "gray"}
+          icon={<span>{todo.completed ? "✅" : "☑️"}</span>}
+        />
+
+        {isEditing ? (
+          <Input
+  ref={inputRef}
+  value={editText}
+  onChange={(e) => setEditText(e.target.value)}
+  size="sm"
+  onKeyDown={(e) => {
+    if (e.key === "Enter") handleSave();
+    if (e.key === "Escape") handleCancel();
+  }}
+/>
+
+        ) : (
+          <Text
+            flex="1"
+            textDecoration={todo.completed ? "line-through" : "none"}
+            color={todo.completed ? "gray.500" : "gray.800"}
           >
             {todo.text}
-          </span>
-        ) : (
-          <>
-            <input
-              type="text"
-              value={editText}
-              onChange={(e) => setEditText(e.target.value)}
-              onKeyDown={handleKeyDown}
-              autoFocus
-              style={{ width: "100%" }}
-            />
-            {error && (
-              <small style={{ display: "block", marginTop: "4px" }}>
-                {error}
-              </small>
-            )}
-          </>
-        )}
-      </div>
-
-      <div style={{ display: "flex", gap: "8px" }}>
-        <button
-          type="button"
-          onClick={() => onToggleTodo(todo.id)}
-          title="Completar"
-          disabled={isEditing}
-        >
-          {todo.completed ? "☑️" : "✅"}
-        </button>
-
-        {!isEditing ? (
-          <button type="button" onClick={startEdit} title="Editar">
-            ✏️
-          </button>
-        ) : (
-          <>
-            <button type="button" onClick={saveEdit} title="Guardar">
-              💾
-            </button>
-            <button type="button" onClick={cancelEdit} title="Cancelar">
-              ✖️
-            </button>
-          </>
+          </Text>
         )}
 
-        <button
-         type="button"
-         onClick={() => onDeleteTodo(todo)}
-         title="Eliminar"
-         disabled={isEditing}
-     >
-  🗑
-</button>
-      </div>
-    </li>
+        <Spacer />
+
+        {isEditing ? (
+  <>
+    <IconButton
+      aria-label="Guardar"
+      size="sm"
+      colorScheme="green"
+      onClick={handleSave}
+      icon={<span>✅</span>}
+    />
+    <IconButton
+      aria-label="Cancelar"
+      size="sm"
+      variant="ghost"
+      onClick={handleCancel}
+      icon={<span>❌</span>}
+    />
+  </>
+) : (
+  <IconButton
+    aria-label="Editar"
+    size="sm"
+    variant="ghost"
+    onClick={() => {
+      setEditText(todo.text); // por si cambió desde afuera
+      setIsEditing(true);
+    }}
+    icon={<span>✏️</span>}
+  />
+)}
+
+
+        {!isEditing && (
+  <IconButton
+    aria-label="Eliminar"
+    size="sm"
+    variant="ghost"
+    colorScheme="red"
+    onClick={() => onDeleteTodo(todo)}
+    icon={<span>🗑️</span>}
+  />
+)}
+      </HStack>
+    </Box>
   );
 }
+
+export default Todo;

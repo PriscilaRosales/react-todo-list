@@ -1,29 +1,20 @@
+import { VStack } from "@chakra-ui/react";
 import Todo from "./Todo.jsx";
 
-export default function TodoList({ todos, onToggleTodo, onDeleteTodo, onEditTodo }) {
-  if (!todos || todos.length === 0) {
-    return (
-      <div>
-        <h2>Lista</h2>
-        <p>No hay tareas todavía.</p>
-      </div>
-    );
-  }
-
+function TodoList({ todos, onToggleTodo, onDeleteTodo, onEditTodo }) {
   return (
-    <div>
-      <h2>Lista</h2>
-      <ul>
-        {todos.map((todo) => (
-          <Todo
-            key={todo.id}
-            todo={todo}
-            onToggleTodo={onToggleTodo}
-            onDeleteTodo={onDeleteTodo}
-            onEditTodo={onEditTodo}
-          />
-        ))}
-      </ul>
-    </div>
+    <VStack spacing={3} align="stretch">
+      {todos.map((todo) => (
+        <Todo
+          key={todo.id}
+          todo={todo}
+          onToggleTodo={onToggleTodo}
+          onDeleteTodo={onDeleteTodo}
+          onEditTodo={onEditTodo}
+        />
+      ))}
+    </VStack>
   );
 }
+
+export default TodoList;
