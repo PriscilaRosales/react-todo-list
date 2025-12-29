@@ -108,13 +108,13 @@ export default function Todo({ todo, onToggleTodo, onDeleteTodo, onEditTodo }) {
         )}
 
         <button
-          type="button"
-          onClick={() => onDeleteTodo(todo.id)}
-          title="Eliminar"
-          disabled={isEditing}
-        >
-          🗑
-        </button>
+         type="button"
+         onClick={() => onDeleteTodo(todo)}
+         title="Eliminar"
+         disabled={isEditing}
+     >
+  🗑
+</button>
       </div>
     </li>
   );

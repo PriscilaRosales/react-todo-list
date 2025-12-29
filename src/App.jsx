@@ -2,6 +2,19 @@ import { useEffect, useState } from "react";
 import Form from "./components/Form.jsx";
 import TodoList from "./components/TodoList.jsx";
 
+import {
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalCloseButton,
+  useDisclosure,
+  Text,
+} from "@chakra-ui/react";
+
 function App() {
   const STORAGE_KEY = "todos";
 
@@ -11,6 +24,9 @@ function App() {
   });
 
   const [filter, setFilter] = useState("all");
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [todoToDelete, setTodoToDelete] = useState(null);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
@@ -41,11 +57,11 @@ function App() {
   );
 };
 
-  const handleDeleteTodo = (id) => {
-    const confirmDelete = window.confirm("¿Seguro que querés eliminar esta tarea?");
-    if (!confirmDelete) return;
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
-  };
+  const handleDeleteTodo = (todo) => {
+  setTodoToDelete(todo);
+  onOpen();
+};
+
 
   const filteredTodos = todos.filter((todo) => {
     if (filter === "completed") return todo.completed;
@@ -74,6 +90,40 @@ function App() {
         onDeleteTodo={handleDeleteTodo}
         onEditTodo={handleEditTodo}
       />
+
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+  <ModalOverlay />
+  <ModalContent>
+    <ModalHeader>Eliminar tarea</ModalHeader>
+    <ModalCloseButton />
+
+    <ModalBody>
+      <Text>
+        ¿Seguro que querés eliminar{" "}
+        <strong>{todoToDelete?.text}</strong>?
+      </Text>
+    </ModalBody>
+
+    <ModalFooter>
+      <Button variant="ghost" mr={3} onClick={onClose}>
+        Cancelar
+      </Button>
+      <Button
+        colorScheme="red"
+        onClick={() => {
+          setTodos((prev) =>
+            prev.filter((t) => t.id !== todoToDelete.id)
+          );
+          setTodoToDelete(null);
+          onClose();
+        }}
+      >
+        Eliminar
+      </Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+
     </div>
   );
 }
