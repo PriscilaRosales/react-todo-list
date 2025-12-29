@@ -7,28 +7,19 @@ export default function Form({ onAddTodo }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const trimmed = text.trim();
+    const value = text.trim();
 
-    // ✅ Validación (TP)
-    if (!trimmed) {
-      setError("Por favor escribí una tarea antes de agregar.");
+    if (value.length === 0) {
+      setError("La tarea no puede estar vacía.");
       return;
     }
 
-    if (trimmed.length < 2) {
-      setError("La tarea debe tener al menos 2 caracteres.");
+    if (value.length < 2) {
+      setError("Escribí al menos 2 caracteres.");
       return;
     }
 
-    if (trimmed.length > 80) {
-      setError("La tarea no puede superar 80 caracteres.");
-      return;
-    }
-
-    // ✅ Enviar a App
-    onAddTodo(trimmed);
-
-    // ✅ Reset
+    onAddTodo(value);
     setText("");
     setError("");
   };
@@ -36,35 +27,29 @@ export default function Form({ onAddTodo }) {
   const handleChange = (e) => {
     setText(e.target.value);
 
+    // si ya había error, lo limpiamos cuando empiece a escribir
     if (error) setError("");
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: 16 }}>
-      <label style={{ display: "block", marginBottom: 8 }}>
-        Nueva tarea
-      </label>
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="todo">Nueva tarea</label>
 
-      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-        {/* Ícono simple */}
+      <div>
         <span aria-hidden="true">➕</span>
 
         <input
+          id="todo"
           type="text"
           value={text}
           onChange={handleChange}
           placeholder="Escribí una tarea..."
-          style={{ flex: 1, padding: 8 }}
         />
 
         <button type="submit">Agregar</button>
       </div>
 
-      {error ? (
-        <p role="alert" style={{ marginTop: 8 }}>
-          {error}
-        </p>
-      ) : null}
+      {error && <p role="alert">{error}</p>}
     </form>
   );
 }
