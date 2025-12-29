@@ -1,6 +1,6 @@
-import Todo from "./Todo";
+import Todo from "./Todo.jsx";
 
-export default function TodoList({ todos, onToggleTodo, onDeleteTodo }) {
+export default function TodoList({ todos, onToggleTodo, onDeleteTodo, onEditTodo }) {
   if (!todos || todos.length === 0) {
     return (
       <div>
@@ -20,6 +20,7 @@ export default function TodoList({ todos, onToggleTodo, onDeleteTodo }) {
             todo={todo}
             onToggleTodo={onToggleTodo}
             onDeleteTodo={onDeleteTodo}
+            onEditTodo={onEditTodo}
           />
         ))}
       </ul>

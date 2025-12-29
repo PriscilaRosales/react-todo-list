@@ -33,6 +33,14 @@ function App() {
     );
   };
 
+  const handleEditTodo = (id, newText) => {
+  setTodos((prev) =>
+    prev.map((todo) =>
+      todo.id === id ? { ...todo, text: newText } : todo
+    )
+  );
+};
+
   const handleDeleteTodo = (id) => {
     const confirmDelete = window.confirm("¿Seguro que querés eliminar esta tarea?");
     if (!confirmDelete) return;
@@ -64,6 +72,7 @@ function App() {
         todos={filteredTodos}
         onToggleTodo={handleToggleTodo}
         onDeleteTodo={handleDeleteTodo}
+        onEditTodo={handleEditTodo}
       />
     </div>
   );
