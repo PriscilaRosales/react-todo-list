@@ -1,55 +1,56 @@
 import { useState } from "react";
+import {
+  Button,
+  HStack,
+  Input,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+} from "@chakra-ui/react";
 
-export default function Form({ onAddTodo }) {
+function Form({ onAddTodo }) {
   const [text, setText] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const value = text.trim();
+    const trimmed = text.trim();
 
-    if (value.length === 0) {
-      setError("La tarea no puede estar vacía.");
+    if (trimmed.length < 3) {
+      setError("La tarea debe tener al menos 3 caracteres");
       return;
     }
 
-    if (value.length < 2) {
-      setError("Escribí al menos 2 caracteres.");
-      return;
-    }
-
-    onAddTodo(value);
+    onAddTodo(trimmed);
     setText("");
     setError("");
   };
 
-  const handleChange = (e) => {
-    setText(e.target.value);
-
-    // si ya había error, lo limpiamos cuando empiece a escribir
-    if (error) setError("");
-  };
-
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="todo">Nueva tarea</label>
+      <FormControl isInvalid={!!error}>
+        <FormLabel>Nueva tarea</FormLabel>
 
-      <div>
-        <span aria-hidden="true">➕</span>
+        <HStack>
+          <Input
+            placeholder="Escribí una tarea..."
+            value={text}
+            onChange={(e) => {
+              setText(e.target.value);
+              if (error) setError("");
+            }}
+          />
 
-        <input
-          id="todo"
-          type="text"
-          value={text}
-          onChange={handleChange}
-          placeholder="Escribí una tarea..."
-        />
+          <Button type="submit" colorScheme="purple">
+            Agregar
+          </Button>
+        </HStack>
 
-        <button type="submit">Agregar</button>
-      </div>
-
-      {error && <p role="alert">{error}</p>}
+        <FormErrorMessage>{error}</FormErrorMessage>
+      </FormControl>
     </form>
   );
 }
+
+export default Form;
