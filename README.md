@@ -7,7 +7,7 @@ La interfaz es responsive y fue construida siguiendo buenas prácticas de React 
 ---
 
 ## Demo
-(Agregare el link cuando el proyecto esté deployado)
+👉 https://react-todo-list-nine-rho.vercel.app
 
 ---
 
@@ -77,7 +77,7 @@ Cualquier acción (agregar, editar, completar o eliminar) actualiza:
 ## 🌐 Deploy
 
 El proyecto se encuentra deployado en:  
-👉 (agregare link una vez finalizado)
+👉 react-todo-list-nine-rho.vercel.app
 
 ## 📸 Capturas
 Las capturas del proyecto se encuentran documentadas en el archivo:
