@@ -1,16 +1,88 @@
-# React + Vite
+# Todo List – React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación de gestión de tareas desarrollada con React.
+Permite crear, editar, completar, filtrar y eliminar tareas, con persistencia de datos en localStorage.
+La interfaz es responsive y fue construida siguiendo buenas prácticas de React y UX.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Demo
+(Agregare el link cuando el proyecto esté deployado)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Funcionalidades
 
-## Expanding the ESLint configuration
+- Agregar tareas con validación (mínimo de caracteres)
+- Editar tareas existentes con feedback visual
+- Marcar tareas como completadas
+- Eliminar tareas con confirmación mediante modal
+- Filtrar tareas:
+  - Todas
+  - Incompletas
+  - Completadas
+- Persistencia de datos usando localStorage
+- Interfaz responsive
+- Mensajes de error y feedback al usuario
+- Tooltips en íconos para mejorar la experiencia de uso
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠 Tecnologías utilizadas
+
+- **React**
+- **Chakra UI** (sistema de estilos)
+- **Vite**
+- **LocalStorage**
+
+---
+
+## 📂 Estructura del proyecto
+
+src/
+├─ App.jsx
+├─ components/
+│  ├─ Form.jsx
+│  ├─ TodoList.jsx
+│  ├─ Todo.jsx
+├─ main.jsx
+
+## 🧪 Validaciones y experiencia de usuario
+
+- No se permite agregar tareas con menos de 3 caracteres
+- Mensajes de error visibles al usuario
+- Al editar una tarea:
+  - El input recibe foco automáticamente
+  - Se puede guardar o cancelar la edición
+- Tooltips informativos en los íconos (editar, eliminar, completar)
+
+## 💾 Persistencia de datos
+
+Las tareas se almacenan en `localStorage`.  
+Cualquier acción (agregar, editar, completar o eliminar) actualiza:
+
+- El estado de la aplicación
+- El almacenamiento local
+
+## 🚀 Cómo ejecutar el proyecto
+
+1. Clonar el repositorio
+2. Instalar dependencias:
+   ```bash
+   npm install
+3. Ejecutar el proyecto
+   npm run dev
+
+
+## 🌐 Deploy
+
+El proyecto se encuentra deployado en:  
+👉 (agregare link una vez finalizado)
+
+## 📸 Capturas
+Las capturas del proyecto se encuentran documentadas en el archivo:
+👉 [Ver capturas del proyecto](./screenshots/screenshots.md)
+
+
+
+
