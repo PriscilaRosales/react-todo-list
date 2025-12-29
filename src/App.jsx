@@ -5,6 +5,8 @@ import TodoList from "./components/TodoList.jsx";
 
 function App() {
   const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState("all");
+
 
   const handleAddTodo = (text) => {
     const newTodo = {
@@ -31,14 +33,30 @@ function App() {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
 
+  const filteredTodos = todos.filter((todo) => {
+  if (filter === "completed") return todo.completed;
+  if (filter === "active") return !todo.completed;
+  return true; // "all"
+});
+
   return (
     <div className="app">
       <h1>Todo List</h1>
 
       <Form onAddTodo={handleAddTodo} />
 
+      <label>
+  Filtrar:
+  <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+    <option value="all">Todas</option>
+    <option value="active">Incompletas</option>
+    <option value="completed">Completadas</option>
+  </select>
+</label>
+
+
       <TodoList
-        todos={todos}
+        todos={filteredTodos}
         onToggleTodo={handleToggleTodo}
         onDeleteTodo={handleDeleteTodo}
       />
